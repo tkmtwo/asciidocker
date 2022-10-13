@@ -1,0 +1,56 @@
+version: "3"
+services:
+  kroki:
+    image: yuzutech/kroki
+    hostname: kroki
+    container_name: kroki
+    environment:
+      - KROKI_BLOCKDIAG_HOST=blockdiag
+      - KROKI_MERMAID_HOST=mermaid
+      - KROKI_BPMN_HOST=bpmn
+      - KROKI_EXCALIDRAW_HOST=excalidraw
+    ports:
+      - "8000:8000"
+  blockdiag:
+    image: yuzutech/kroki-blockdiag
+    hostname: blockdiag
+    container_name: blockdiag
+    expose:
+      - "8001"
+    depends_on:
+      - kroki
+  mermaid:
+    image: yuzutech/kroki-mermaid
+    hostname: mermaid
+    container_name: mermaid
+    expose:
+      - "8002"
+    depends_on:
+      - kroki
+  bpmn:
+    image: yuzutech/kroki-bpmn
+    hostname: bpmn
+    container_name: bpmn
+    expose:
+      - "8003"
+    depends_on:
+      - kroki
+  excalidraw:
+    image: yuzutech/kroki-excalidraw
+    hostname: excalidraw
+    container_name: excalidraw
+    expose:
+      - "8004"
+    depends_on:
+      - kroki
+  asciidoctor:
+    image: asciidoctor/docker-asciidoctor
+    hostname: asciidoctor
+    container_name: asciidoctor
+    volumes:
+      - ./:/documents
+    stdin_open: true
+    tty: true
+    depends_on:
+      - kroki
+
